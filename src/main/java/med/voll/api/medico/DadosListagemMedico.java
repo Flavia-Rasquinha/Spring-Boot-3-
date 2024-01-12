@@ -5,4 +5,5 @@ public record DadosListagemMedico(String nome, String email, String crm, Especia
     public DadosListagemMedico(Medico medico) {
         this(medico.getNome(), medico.getEmail(), medico.getCrm(), medico.getEspecialidade());
     }
+
 }
