@@ -27,14 +27,20 @@ public class Medico {
 
     @Embedded
     private Endereco endereco;
+    private Boolean ativo;
 
     public Medico(DadosCadastrosMedicos dados) {
+        this.ativo = true;
         this.nome = dados.nome();
         this.email = dados.email();
         this.telefone = dados.telefone();
         this.crm = dados.crm();
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {
@@ -51,5 +57,21 @@ public class Medico {
 
     public Especialidade getEspecialidade() {
         return especialidade;
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoMedicos dados) {
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+        }
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
+        if (dados.endereco() != null) {
+            this.endereco.atualizarInformacoes(dados.endereco());
+        }
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }
