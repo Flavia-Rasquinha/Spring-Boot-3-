@@ -1,18 +1,18 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.domain.consulta.AgendaDeConsultas;
-import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
-import med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
-import med.voll.api.domain.medico.DadosDetalhamentoMedico;
+import med.voll.api.domain.consulta.*;
 import med.voll.api.repository.ConsultaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("consultas")
+@SecurityRequirement(name = "bearer-key")
 public class ConsultaController {
 
     @Autowired
@@ -23,19 +23,20 @@ public class ConsultaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity agendar(@RequestBody @Valid DadosAgendamentoConsulta dados) {
-        agenda.agendar(dados);
-        return ResponseEntity.ok(new DadosDetalhamentoConsulta(null, null, null, null));
+    public ResponseEntity agendar(@RequestBody @Valid DadosAgendamentoConsulta dados, UriComponentsBuilder uriBuilder) {
+        var agendar = agenda.agendar(dados);
+        var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(agendar.id()).toUri();
 
+        return ResponseEntity.created(uri).body(agendar);
     }
 
-//    @DeleteMapping("/{id}")
-//    @Transactional
-//    public ResponseEntity cancelarConsulta(@PathVariable Long id) {
-//        agenda.cancelarConsulta(id);
-//
-//        return ResponseEntity.ok("Consulta excluída com sucesso");
-//    }
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity cancelarConsulta(@RequestBody @Valid DadosCancelamentoConsulta dados) {
+        agenda.cancelarConsulta(dados);
+
+        return ResponseEntity.noContent().build();
+    }
 
 
 

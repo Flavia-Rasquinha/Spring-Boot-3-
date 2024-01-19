@@ -2,6 +2,7 @@ package med.voll.api.domain.consulta;
 
 import jakarta.persistence.*;
 import lombok.*;
+import med.voll.api.domain.medico.Especialidade;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.paciente.Paciente;
 
@@ -30,9 +31,36 @@ public class Consulta {
 
     private LocalDateTime data;
 
-    public Consulta(Medico medico, Paciente paciente, LocalDateTime data) {
+    private Especialidade especialidade;
+
+    private MotivoCancelamentoEnum motivoCancelamento;
+
+    public Consulta(Medico medico, Paciente paciente, LocalDateTime data, Especialidade especialidade, MotivoCancelamentoEnum motivoCancelamento) {
         this.medico = medico;
         this.paciente = paciente;
         this.data = data;
+        this.especialidade = especialidade;
+        this.motivoCancelamento = motivoCancelamento;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public Especialidade getEspecialidade() {
+        return especialidade;
+    }
+
 }
